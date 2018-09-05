@@ -1,12 +1,44 @@
 {
-  "pages": [
-    "pages/index/main",
-    "pages/counter/main"
-  ],
-  "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "WeChat",
-    "navigationBarTextStyle": "black"
-  }
+    "pages": [
+        "pages/index/main",
+        "pages/onsale/main",
+        "pages/shop/main",
+        "pages/living/main",
+        "pages/my/main",
+        "pages/movieDetail/main"
+    ],
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTitleText": "mTime",
+        "navigationBarTextStyle": "black"
+    },
+    "tabBar": {
+        "backgroundColor": "#fafafa",
+        "borderStyle": "white",
+        "selectedColor": "#b4282d",
+        "color": "#666",
+        "list": [
+            {
+                "pagePath": "pages/index/main",
+                "text": "首页"
+            },
+            {
+                "pagePath": "pages/onsale/main",
+                "text": "购票"
+            },
+            {
+                "pagePath": "pages/shop/main",
+                "text": "商城"
+            },
+            {
+                "pagePath": "pages/living/main",
+                "text": "直播"
+            },
+            {
+                "pagePath": "pages/my/main",
+                "text": "我的"
+            }
+        ]
+    }
 }

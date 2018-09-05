@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <scroll-view class="swiper-tab" scroll-x>
-            <view v-for="(item,index) in navList" :key="index" :data-index="index" class="swiper-tab-item" @tap="changeCurrent">{{item.title}}</view>
+    <div class="scroll-wrapper">
+        <scroll-view class="swiper-tab" scroll-x :scroll-left="scrollX">
+            <view v-for="(item,index) in navList" :key="index" :data-index="index" :id="item.type" class="swiper-tab-item" @tap="changeCurrent">{{item.title}}</view>
             <view class="border" :style="position">
                 <view class="border-bg"></view>
             </view>
@@ -11,12 +11,16 @@
 
 <script>
     import {obj2style} from "../common/basic";
+    import { request } from '../utils/index'
 
     export default {
         name: 'slideNav',
         data() {
             return {
-                navWidth: ''
+                navWidth: '',
+                left: 0,
+                scrollX: '',
+                scale: 0
             }
         },
         props: {
@@ -29,39 +33,45 @@
         },
         computed: {
             position() {
-                const left = this.navWidth * this.currentTab + 'px';
                 let style = {
-                    left
+                    left: this.left[this.currentTab] + 'px',
+                    width: this.navWidth[this.currentTab] + 'px'
                 }
+
                 return obj2style(style);
             }
         },
         methods: {
             changeCurrent(e) {
                 const current = e.target.dataset.index;
-                console.log(e.target)
-                const query = wx.createSelectorQuery();
-                query.selectAll('.swiper-tab-item').boundingClientRect(res => {
-                    this.navWidth = res[current].width;
-                    console.log(this.navWidth)
-                }).exec()
 
                 if (this.currentTab === current) return false;
+
+                const scrollX = this.left[current];
+                this.scrollX = scrollX > 200 ? scrollX - 20 : 0;
+
                 this.$emit('update:currentTab', current)
             }
         },
         mounted() {
             const query = wx.createSelectorQuery();
-            query.select('.swiper-tab-item').boundingClientRect(res => {
-                this.navWidth = res.width;
+            query.selectAll('.swiper-tab-item').boundingClientRect(res => {
+                this.navWidth = res.map((v, k) => v.width);
+                this.left = res.map((v, k) => v.left);
             }).exec()
+
+            this.scale = wx.getSystemInfoSync().windowWidth / 750;
         }
     }
 </script>
 
 <style lang="scss" scoped>
-    .swiper-tab{
+    .scroll-wrapper {
+        display: inline-block;
         width: 550rpx;
+    }
+    .swiper-tab{
+        width: inherit;
         overflow: hidden;
         white-space: nowrap;
         background: #222;
@@ -69,10 +79,9 @@
         .swiper-tab-item {
             color: #ccc;
             display: inline-block;
-            height: auto;
-            /*width: 132rpx;*/
+            height: inherit;
             width: auto;
-            padding: 0 35rpx;
+            margin: 0 35rpx;
             font-size: 15px;
             line-height: 36px;
             text-align: center;
@@ -83,8 +92,6 @@
             left: 0;
             top: 66rpx;
             height: 6rpx;
-            width: 60rpx;
-            padding: 0 36rpx;
             transition: left 0.2s;
             z-index: 99;
             .border-bg {
