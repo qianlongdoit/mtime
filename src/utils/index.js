@@ -47,6 +47,9 @@ export function request(options) {
     });
 }
 
+export function convertDate(s) {
+    return s.slice(0, 4) + '年' + s.slice(4, 6) + '月' + s.slice(6) + '日';
+}
 // export default {
 //     formatNumber,
 //     formatTime,

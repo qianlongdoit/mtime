@@ -33,7 +33,9 @@
                         v.isPresale = isPresale(v.rd);
                         this.screenType.forEach((type, key) => {
                             if (v[type]) {
-                                return v.screenType = type.replace(/is/,'');
+                                v.screenType = type.replace(/is/,'');
+                                if (type === 'isIMAX3D') v.screenType = 'IMAX 3D';
+                                return false;
                             }
                         })
                     })
